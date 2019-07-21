@@ -1,0 +1,9 @@
+ Volume in drive C has no label.
+ Volume Serial Number is 1C6F-0D4D
+
+ Directory of c:\Users\
+
+06/26/2019  03:56 PM    <DIR>          .
+06/26/2019  03:56 PM    <DIR>          ..
+07/18/2016  09:21 AM    <DIR>          both
+06/26/2019  03:56 PM                 0 d.txt

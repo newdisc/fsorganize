@@ -23,7 +23,6 @@ public class InitController {
 			@RequestParam
 			final String directory) {
 		log.info("Initializing File List: " + directory);
-		//final String rootname = "C:\\Users\\shri\\Documents\\docscan";
 		FileInfoTreeNode ret = fileSvc.getFiles(directory);
 		return ret;
 	}

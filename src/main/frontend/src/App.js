@@ -18,10 +18,6 @@ function App() {
         >
           Learn React
         </a>
-        <a 
-        target="_blank"
-        rel="noopener noreferrer"
-        href="http://localhost:8080/init?directory=C%3A%5CUsers%5Cshri%5CDocuments%5Cdocscan%5Csrikanth%5CSLEmp">Get FileInfo</a>
       </header>
     </div>
   );

@@ -45,7 +45,7 @@ public class ChecksumDAO {
         	} else {
             	byte[] ret = checksumFileBytes(input);
             	sret = bytesToHex(ret);
-            	log.debug("From Calculations sha3-256 = " + sret);
+            	log.debug("From Calculations sha3-256 = " + shafname + " sha: " + sret);
             	//Files.isWritable(path)shapath.getParent().
             	if (WRITESUM && Files.isWritable(shapath.getParent())) {
             		Files.writeString(shapath, sret);

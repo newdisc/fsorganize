@@ -13,7 +13,7 @@ import nd.fsorganize.fileinfo.FileInfoService;
 @Slf4j
 @RunWith(JUnit4.class)
 public class FileInfoServiceTest {
-	public static final String basedir = "C:\\Users\\shri\\Documents\\docscan\\srikanth\\SLEmp";//";//\\srikanth\\SLEmp\\barcap
+	public static final String basedir = "src/test/resources";
 	private FileInfoService fileSvc;
 	
 	@Before

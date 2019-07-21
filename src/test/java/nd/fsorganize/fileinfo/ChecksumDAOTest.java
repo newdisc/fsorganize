@@ -15,14 +15,14 @@ import nd.fsorganize.fileinfo.ChecksumDAO;
 public class ChecksumDAOTest {
 	public static final String basedir = FileInfoDAOTests.basedir;
 	public static final String testfil = FileInfoDAOTests.testfil;
-	public static final String cksum = "c618cb648d104d5ee03b50138e5509e0f99da3901b4fbddccdf2c38e70bd125c";
+	public static final String cksum = "045b2b0478f563d09f53fc160bdb1bb112da425376d9fa8e6ef312f7ae518b50";
 	public static final byte[] cksby = {
-			(byte)0xc6,(byte)0x18,(byte)0xcb,(byte)0x64,(byte)0x8d,(byte)0x10,
-			(byte)0x4d,(byte)0x5e,(byte)0xe0,(byte)0x3b,(byte)0x50,(byte)0x13,
-			(byte)0x8e,(byte)0x55,(byte)0x09,(byte)0xe0,(byte)0xf9,(byte)0x9d,
-			(byte)0xa3,(byte)0x90,(byte)0x1b,(byte)0x4f,(byte)0xbd,(byte)0xdc,
-			(byte)0xcd,(byte)0xf2,(byte)0xc3,(byte)0x8e,(byte)0x70,(byte)0xbd,
-			(byte)0x12,(byte)0x5c
+	        (byte)0x04,(byte)0x5b,(byte)0x2b,(byte)0x04,(byte)0x78,(byte)0xf5,
+	        (byte)0x63,(byte)0xd0,(byte)0x9f,(byte)0x53,(byte)0xfc,(byte)0x16,
+	        (byte)0x0b,(byte)0xdb,(byte)0x1b,(byte)0xb1,(byte)0x12,(byte)0xda,
+	        (byte)0x42,(byte)0x53,(byte)0x76,(byte)0xd9,(byte)0xfa,(byte)0x8e,
+	        (byte)0x6e,(byte)0xf3,(byte)0x12,(byte)0xf7,(byte)0xae,(byte)0x51,
+	        (byte)0x8b,(byte)0x50
 		};
 
 	@Test
