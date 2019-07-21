@@ -1,0 +1,3 @@
+set PATH=.\node;%PATH%
+node --version
+npm --version

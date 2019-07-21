@@ -17,7 +17,7 @@ public class InitController {
 	@Autowired
 	FileInfoService fileSvc;
 	
-	@CrossOrigin
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@GetMapping("/init")
 	public FileInfoTreeNode getFiles(
 			@RequestParam

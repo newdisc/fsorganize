@@ -29,8 +29,12 @@ public class FileInfoTreeNode extends TreeNode<FileInfo> {
 			log.error("Overwriting data: " + curtn.getData());
 		}
 		curtn.setData(fi);
-		curtn.setValue(fi.getBytes());
-		log.debug("Parts done: ");
+		if (FileInfo.Type.DIRECTORY == fi.getType()) {
+		    curtn.setValue(0);
+		} else {
+		    curtn.setValue(fi.getBytes());
+		}
+		log.debug("Parts done: " + curtn.getData().getName() + " Bytes: " + fi.getBytes() + " Value: " + curtn.getValue());
 	}
 
 	private TreeNode<FileInfo> populatePathTreeNode(final String[] parts) {

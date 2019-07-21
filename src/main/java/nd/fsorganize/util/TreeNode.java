@@ -13,7 +13,6 @@ import lombok.Data;
 public class TreeNode<T> {
 	@JsonIgnore
 	private final TreeNode<T> parent;
-	@JsonIgnore
 	private T data;
 	@JsonIgnore
 	protected Map<String, TreeNode<T>> childrenMap = new HashMap<String, TreeNode<T>>();

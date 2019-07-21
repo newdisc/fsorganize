@@ -1,84 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-      <script src="treemap.js"> </script>
-    -->
-    <title>React App</title>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <style>
+//import * as d3 from 'd3';
 
-
-#chart {
-  width: 960px;
-  height: 500px;
-  background: #ddd;
-}
-
-text {
-  pointer-events: none;
-}
-
-.grandparent text {
-  font-weight: bold;
-}
-
-rect {
-  fill: none;
-  stroke: #fff;
-}
-
-rect.parent,
-.grandparent rect {
-  stroke-width: 2px;
-}
-
-.grandparent rect {
-  fill: orange;
-}
-
-.grandparent:hover rect {
-  fill: #ee9700;
-}
-
-.children rect.parent,
-.grandparent rect {
-  cursor: pointer;
-}
-
-.children rect.parent {
-  fill: #bbb;
-  fill-opacity: .5;
-}
-
-.children:hover rect.child {
-  fill: #bbb;
-}
-
-</style>
-  </head>
-  <body>
-     <p id="chart"></p>
-        
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <script>
 console.log("Hi1");
 var margin = {top: 20, right: 0, bottom: 0, left: 0},
     width = 960,
@@ -104,7 +26,7 @@ var y = d3.scale.linear()
 var svg = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.bottom + margin.top)
-    .style("margin.left", -margin.left + "px")
+    .style("margin-left", -margin.left + "px")
     .style("margin.right", -margin.right + "px")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -124,17 +46,12 @@ grandparent.append("text")
     .attr("y", 6 - margin.top)
     .attr("dy", ".75em");
 
-    function dataHandle(root) {
-      console.log("Hi data");
-      console.log(root);
+    console.log("Hi1");
+    d3.json("data.json", function(root) {
   initialize(root);
   accumulate(root);
   layout(root);
-  console.log("Hi layout");
-  console.log(root);
   display(root);
-  console.log("Hi display");
-console.log(root);
 
   function initialize(root) {
     root.x = root.y = 0;
@@ -148,17 +65,9 @@ console.log(root);
   // We also take a snapshot of the original children (_children) to avoid
   // the children being overwritten when when layout is computed.
   function accumulate(d) {
-    var ret = 0;
-    if (d._children = d.children){
-      ret += d.value;
-      ret += d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 0);
-    } else {
-      ret += d.value;
-    }
-    return ret;
-    //return (d._children = d.children)
-    //    ? d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 0)
-    //    : d.value;
+    return (d._children = d.children)
+        ? d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 0)
+        : d.value;
   }
 
   // Compute the treemap layout recursively such that each group of siblings
@@ -272,19 +181,4 @@ console.log(root);
         ? name(d.parent) + "." + d.name
         : d.name;
   }
-}
-    console.log("Hi json");
-    d3.json("http://localhost:8080/init?directory=C%3A%5CUsers%5Cshri%5CDocuments%5Cdocscan%5Csrikanth%5CSLEmp", dataHandle);      
-    </script>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
-</html>
+});
