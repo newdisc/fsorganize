@@ -14,16 +14,15 @@ import nd.fsorganize.fileinfo.FileInfoTreeNode;
 @RestController
 public class InitController {
 
-	@Autowired
-	FileInfoService fileSvc;
-	
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
-	@GetMapping("/init")
-	public FileInfoTreeNode getFiles(
-			@RequestParam
-			final String directory) {
-		log.info("Initializing File List: " + directory);
-		FileInfoTreeNode ret = fileSvc.getFiles(directory);
-		return ret;
-	}
+    @Autowired
+    FileInfoService fileSvc;
+    
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/init")
+    public FileInfoTreeNode getFiles( @RequestParam final String directory) {
+        log.info("Initializing File List: " + directory);
+        final FileInfoTreeNode ret = fileSvc.getFiles(directory);
+        log.debug("Finished Initializing File List: " + directory);
+        return ret;
+    }
 }

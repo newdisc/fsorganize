@@ -8,14 +8,12 @@ import nd.fsorganize.fileinfo.FileInfoService;
 
 @SpringBootApplication
 public class FsorganizeApplication {
-	FileInfoService fileSvc = new FileInfoService();
-	@Bean
-	FileInfoService getFileInfoService() {
-		return fileSvc;
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(FsorganizeApplication.class, args);
-	}
-
+    FileInfoService fileSvc = new FileInfoService();
+    @Bean
+    FileInfoService getFileInfoService() {
+        return fileSvc;
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(FsorganizeApplication.class, args);
+    }
 }
