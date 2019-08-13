@@ -1,9 +1,10 @@
 package nd.fsorganize.util;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class FSOrganizeException extends RuntimeException {
+    private static final Logger log = LoggerFactory.getLogger(FSOrganizeException.class);
     private static final long serialVersionUID = 4865455517913198172L;
 
     public FSOrganizeException(String message) {
@@ -21,5 +22,10 @@ public class FSOrganizeException extends RuntimeException {
     public FSOrganizeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
         log.debug(message, cause);
+    }
+    public static FSOrganizeException raiseAndLog(final String message, final Exception e, final Logger logger) {
+        final String err = message;
+        logger.error(err, e);
+        return new FSOrganizeException(err, e);
     }
 }

@@ -1,25 +1,21 @@
 package nd.fsorganize.fileinfo;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.drew.imaging.ImageProcessingException;
-
-import lombok.extern.slf4j.Slf4j;
 import nd.fsorganize.fileinfo.ChecksumDAO;
 
-@Slf4j
 @RunWith(JUnit4.class)
 public class ChecksumDAOTest {
-    public static final String basedir = FileInfoDAOTests.basedir;
-    public static final String testfil = FileInfoDAOTests.testfil;
+    private static Logger log = LoggerFactory.getLogger(ChecksumDAO.class);
+    public static final String basedir = FileInfoServiceTest.basedir;
+    public static final String testfil = FileAttribDAOTest.testfil;
     public static final String cksum = "ca55ce7f30305d6cc4c7a09cb7e066f2c4ec5dc0cecf311261047dffa854fe50";
     public static final byte[] cksby = {
                  (byte)0xca,(byte)0x55,(byte)0xce,(byte)0x7f,(byte)0x30,
@@ -34,11 +30,16 @@ public class ChecksumDAOTest {
     @Test
     public void checksumFileTest() {
         final File fl = new File(testfil);
-        final String cks = ChecksumDAO.checksumFile(fl, null);
-        log.debug("Checksum: " + cks);
+        final File fsha = new File(testfil + ChecksumDAO.SHAEXT);
+        fsha.delete();
+        String cks = ChecksumDAO.checksumFile(fl, null);
+        log.info("Checksum: {}", cks);
         Assert.assertNotNull(cks);
         Assert.assertNotEquals(0, cks.length());
         Assert.assertEquals(cksum, cks);
+        // .sha3 file will be used now 
+        cks = ChecksumDAO.checksumFile(fl, null);
+        Assert.assertNotNull(cks);
     }
     @Test
     public void bytesToHexTest() {
@@ -55,6 +56,7 @@ public class ChecksumDAOTest {
         Assert.assertNotEquals(0, cks.length);
         Assert.assertArrayEquals(cksby, cks);
     }
+    /*
     @Test
     public void checksumFileBytesExitTest() throws Exception {
         final File fl = new File( FileAttribDAOTest.testfil);
@@ -76,4 +78,5 @@ public class ChecksumDAOTest {
         Assert.assertNotEquals(0, cks.length);
         //Assert.assertArrayEquals(cksby, cks);
     }
+    */
 }

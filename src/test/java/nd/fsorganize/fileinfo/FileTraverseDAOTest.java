@@ -1,5 +1,6 @@
 package nd.fsorganize.fileinfo;
 
+
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,14 +10,15 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import lombok.extern.slf4j.Slf4j;
 import nd.fsorganize.fileinfo.FileTraverseDAO;
 
-@Slf4j
 @RunWith(JUnit4.class)
 public class FileTraverseDAOTest {
-    public static final String basedir = FileInfoDAOTests.basedir;
+    private static Logger log = LoggerFactory.getLogger(FileTraverseDAOTest.class);
+    public static final String basedir = FileInfoServiceTest.basedir;
     @Test
     public void getFilesTest() {
         log.info("Testing Traversal");

@@ -8,17 +8,18 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.drew.imaging.ImageProcessingException;
 
-import lombok.extern.slf4j.Slf4j;
 import nd.fsorganize.fileinfo.FileInfo.Type;
 import nd.fsorganize.util.FSOrganizeException;
 
-@Slf4j
 @Component
 public class FileInfoDAO {
+    private static Logger log = LoggerFactory.getLogger(FileInfoDAO.class);
     private static class ImageAttributeReader implements ChecksumDAO.StreamReader {
         private Map<String, String> readAttributes = null;
         public Map<String, String> getReadAttributes() {
@@ -29,9 +30,8 @@ public class FileInfoDAO {
             try {
                 readAttributes = FileAttribDAO.getAttribFile(str);
             } catch (ImageProcessingException | IOException e) {
-                final String err = "Could NOT get ImageAttributes from stream" + e.getMessage();
-                log.error(err, e);
-                throw new FSOrganizeException(err, e);
+                FSOrganizeException a = FSOrganizeException.raiseAndLog("Could NOT get ImageAttributes from stream" + e.getMessage(), e, log);
+                throw a;
             }
         }
     }
@@ -42,9 +42,8 @@ public class FileInfoDAO {
         try {
             bfn = Files.readAttributes(fl.toPath(), BasicFileAttributes.class);
         } catch (IOException e) {
-            final String err = "Could not find basic attributes of : " + fl.getName();
-            log.error(err);
-            throw new FSOrganizeException(err, e);
+            FSOrganizeException a = FSOrganizeException.raiseAndLog("Could not find basic attributes of : " + fl.getName(), e, log);
+            throw a;
         }
         
         final FileInfo.Type type;
@@ -68,8 +67,8 @@ public class FileInfoDAO {
         }
         long end = System.currentTimeMillis();
         finf.setProctime(end-start);
-        log.debug("FileInfo Found: " + finf);
-        log.info("Image Attributes: " + imgattr.getReadAttributes());
+        log.debug("FileInfo Found: {}", finf);
+        log.info("Image Attributes: {}", imgattr.getReadAttributes());
         return finf;
     }
     public static String getCannonicalName(final File fl) {
@@ -77,9 +76,7 @@ public class FileInfoDAO {
         try {
             fname = fl.getCanonicalPath();
         } catch (IOException e) {
-            final String err = "Could not find canonical path of : " + fl.getName();
-            log.error(err);
-            throw new FSOrganizeException(err, e);
+            throw FSOrganizeException.raiseAndLog("Could not find canonical path of : " + fl.getName(), e, log);
         }
         return fname;
     }

@@ -1,23 +1,24 @@
 package nd.fsorganize.fileinfo;
 
+
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import nd.fsorganize.util.FSOrganizeException;
 
-@Slf4j
 public class FileInfoService {
+    private static Logger log = LoggerFactory.getLogger(FileInfoService.class);
     public FileInfoTreeNode getFiles(final String directory){
         final FileInfoTreeNode root;
         final File rootdir = new File(directory);
         if (!rootdir.isDirectory()) {
-            final String err = "Not a Directory: " + rootdir;
-            log.error(err);
-            throw new FSOrganizeException(err);
+            throw FSOrganizeException.raiseAndLog("Not a Directory: " + rootdir, null, log);
         }
         final List<FileInfo> ret = getFilesInfo(rootdir);
         final String rootcname = FileInfoDAO.getCannonicalName(rootdir);
@@ -41,14 +42,11 @@ public class FileInfoService {
                 .collect(Collectors.toList())
                 ).get();
         } catch (ExecutionException  e) {
-            final String err = "Could not find FileInfos of : " + rootdir;
-            log.error(err);
-            throw new FSOrganizeException(err, e);
+            throw FSOrganizeException.raiseAndLog("Could not find FileInfos of : " + rootdir, e, log);
         } catch (InterruptedException e) {
-            final String err = "Could not find FileInfos of : " + rootdir;
-            log.error(err);
+            FSOrganizeException a = FSOrganizeException.raiseAndLog("Could not find FileInfos of : " + rootdir, e, log);
             Thread.currentThread().interrupt();
-            throw new FSOrganizeException(err, e);
+            throw a;
         }
     }
 }

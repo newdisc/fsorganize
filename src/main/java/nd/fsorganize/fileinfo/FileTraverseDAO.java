@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class FileTraverseDAO {
+    private static Logger log = LoggerFactory.getLogger(FileTraverseDAO.class);
+
     public static Stream<File> getFiles(final File rootdir){
         Stream<File> ret = Stream.of(rootdir);
         final Stream<File> rret = getFilesRecurse(rootdir);
@@ -15,12 +17,12 @@ public class FileTraverseDAO {
         return ret;
     }
     protected static Stream<File> getFilesRecurse(final File rootdir){
-        log.debug("Processing: " + rootdir);
+        log.debug("Processing: {}", rootdir);
         long start = System.currentTimeMillis();
         final File[] matches = rootdir.listFiles();
         long end = System.currentTimeMillis();
-        log.debug("File List Time taken: " + (end-start));
-        log.debug("Files: " + matches.length);
+        log.debug("File List Time taken: {}", (end-start));
+        log.debug("Files: {}", matches.length);
         Stream<File> ret = Arrays.asList(matches).parallelStream()//stream()//stream()
                 .filter(File::isDirectory)
                 .map(FileTraverseDAO::getFilesRecurse) //recurse only directories
