@@ -12,15 +12,22 @@ import nd.fsorganize.util.JSONFileDAO;
 import nd.fsorganize.util.TreeNode;
 
 public class FileInfoTreeNode extends TreeNode<FileInfo> {
+    //This is the ROOT Node of the file Information tree
     private static Logger log = LoggerFactory.getLogger(FileInfoTreeNode.class);
 
     public FileInfoTreeNode(TreeNode<FileInfo> parent, final String nm) {
         super(parent, nm);
     }
 
+    public FileInfoTreeNode() {
+        super(null, null);
+    }
+
     public void populateTree(final List<FileInfo> ret, final String rootName) {
         ret.stream().forEach(fi ->  populateTreeNode(fi, rootName) );
-        log.debug("Json of fileinfo: {}", JSONFileDAO.objectToJson(this));
+        if (log.isDebugEnabled()) {
+            log.debug("Json of fileinfo: {}", JSONFileDAO.objectToJson(this));
+        }
     }
 
     private void populateTreeNode(FileInfo fi, final String rootName) {
@@ -35,7 +42,7 @@ public class FileInfoTreeNode extends TreeNode<FileInfo> {
         } else {
             curtn.setValue(fi.getBytes());
         }
-        log.debug("Parts done: {} Bytes: {} Value: {}" + curtn.getData().getName(), fi.getBytes(), curtn.getValue());
+        log.debug("Parts done: {} Bytes: {} Value: {}", curtn.getData().getName(), fi.getBytes(), curtn.getValue());
     }
 
     @java.lang.SuppressWarnings("squid:S3824")

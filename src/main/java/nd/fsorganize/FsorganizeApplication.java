@@ -19,7 +19,7 @@ public class FsorganizeApplication {
     }
     public static void main(String[] args) {
         if (0==args.length) {
-            SpringApplication.run(FsorganizeApplication.class, args);
+            SpringApplication.run(FsorganizeApplication.class, new String[0]);
         } else {
             log.error("Command line arguments should NOT be present");
         }

@@ -60,15 +60,15 @@ public class FileInfoDAO {
         finf.setCreateDate(new Date(bfn.creationTime().toMillis()));
         finf.setType(type);
         finf.setBytes(bfn.size());
-        final ImageAttributeReader imgattr = new ImageAttributeReader();
         if (type == Type.FILE) {
+            final ImageAttributeReader imgattr = new ImageAttributeReader();
             final String checksum = ChecksumDAO.checksumFile(fl, imgattr);
             finf.setChecksum(checksum);
+            log.info("Image Attributes: {}", imgattr.getReadAttributes());
         }
         long end = System.currentTimeMillis();
         finf.setProctime(end-start);
         log.debug("FileInfo Found: {}", finf);
-        log.info("Image Attributes: {}", imgattr.getReadAttributes());
         return finf;
     }
     public static String getCannonicalName(final File fl) {

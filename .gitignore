@@ -4,3 +4,4 @@
 .settings/
 **/*.log
 **/*.sha3
+**/*.fidb

@@ -29,6 +29,8 @@ public class FileTraverseDAO {
                 .flatMap(lf->lf);
         final Stream<File> orig = Arrays.stream(matches)
                 .filter(f -> !f.getPath().matches(".*\\.sha3$"))
+                .filter(f -> !f.getPath().matches(".*\\.class$"))
+                .filter(f -> !f.getPath().matches(".*\\.fidb$"))
                 .parallel();
         ret = Stream.concat(ret, orig);
         //log.debug("Found files/Dirs: " + ret.size());//with a stream will not know -- lazy

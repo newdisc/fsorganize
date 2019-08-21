@@ -19,7 +19,8 @@ import com.drew.imaging.ImageProcessingException;
 public class FileAttribDAOTest {
     private static Logger log = LoggerFactory.getLogger(FileAttribDAOTest.class);
     public static final String basedir = FileInfoServiceTest.basedir;
-    public static final String testfil = basedir + "/nd/fsorganize/fileinfo/PANO_20171001_074215.jpg";
+    public static final String jpgres = "/nd/fsorganize/fileinfo/PANO_20171001_074215.jpg";
+    public static final String testfil = basedir + jpgres;
 
     @Test
     public void getAttribFileTest() throws IOException, ImageProcessingException {
