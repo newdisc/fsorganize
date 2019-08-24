@@ -28,16 +28,12 @@ public class ThumbNailDAO {
                 return null;
             }
             bi = ThumbNailDAO.scale(bi);
-            /*
-            final String tfilename = fname.substring(0, fname.length() - 4) + ".thumb.jpg";
-            ImageIO.write(bi, "jpg", new File(tfilename));
-            */
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+           ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(bi, "jpg", baos);
             return baos.toByteArray();
         } catch (IOException e) {
-            final FSOrganizeException a = FSOrganizeException.raiseAndLog("Could not read/write image : " + fname, e, log);
-            throw a;
+            throw FSOrganizeException.raiseAndLog(
+                    "Could not read/write image : " + fname, e, log);
         }
     }
     private static BufferedImage scale(BufferedImage source) {
@@ -55,8 +51,7 @@ public class ThumbNailDAO {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gd = ge.getDefaultScreenDevice();
         GraphicsConfiguration gc = gd.getDefaultConfiguration();
-        BufferedImage image = gc.createCompatibleImage(w, h);
-        return image;
+        return gc.createCompatibleImage(w, h);
       }    
     private ThumbNailDAO() {}
 }

@@ -13,6 +13,7 @@ public class FileInfo {
     private long bytes;
     private long proctime;
     private byte[] thumbnail;
+    private String location;
     
     public enum Type {
         FILE, DIRECTORY, OTHER
@@ -72,5 +73,13 @@ public class FileInfo {
 
     public void setThumbnail(byte[] thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

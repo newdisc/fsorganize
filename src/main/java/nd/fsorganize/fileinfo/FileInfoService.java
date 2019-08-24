@@ -27,7 +27,7 @@ public class FileInfoService {
         final List<FileInfo> ret = getFilesInfo(rootdir);
         final String rootcname = FileInfoDAO.getCannonicalName(rootdir);
         root = new FileInfoTreeNode(null, rootcname);
-        root.populateTree(ret, rootcname);
+        root.populateTree(ret);
         final String fileinfdb = rootcname + "/cache.fidb";
         FileCacheDAO<FileInfoTreeNode> cache = new FileCacheDAO<>(
                 new TypeReference<FileInfoTreeNode>() {});

@@ -37,11 +37,11 @@ public class FileInfoServiceTest {
         FileInfoTreeNode finfs = fileSvc.getFiles(root);
         long end = System.currentTimeMillis();
         log.info("Entire File List Time taken: {}", (end-start));
-        log.info("Json of fileinfo: {}", JSONFileDAO.objectToJsonS(finfs));
+        log.debug("Json of fileinfo: {}", JSONFileDAO.objectToJsonS(finfs));
         Assert.assertNotNull(finfs);
         Assert.assertNotEquals(0, finfs.getChildren().size());
     }
-    //@Test
+    @Test
     public void testGetFilesException() {
         final String root = "NONExistingDirectory";
         boolean caught = false;

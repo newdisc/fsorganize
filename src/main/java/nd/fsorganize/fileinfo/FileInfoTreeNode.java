@@ -24,14 +24,14 @@ public class FileInfoTreeNode extends TreeNode<FileInfo> {
         super(null, null);
     }
 
-    public void populateTree(final List<FileInfo> ret, final String rootName) {
-        ret.stream().forEach(fi ->  populateTreeNode(fi, rootName) );
+    public void populateTree(final List<FileInfo> ret) {
+        ret.stream().forEach(fi ->  populateTreeNode(fi));
         if (log.isDebugEnabled()) {
             log.debug("Json of fileinfo: {}", JSONFileDAO.objectToJsonS(this));
         }
     }
 
-    private void populateTreeNode(FileInfo fi, final String rootName) {
+    private void populateTreeNode(FileInfo fi) {
         TreeNode<FileInfo> curtn;
         if (!".".equals(fi.getName())) {
             final Path parts = Paths.get(fi.getName());
@@ -61,7 +61,7 @@ public class FileInfoTreeNode extends TreeNode<FileInfo> {
             final String partnm = part.toString();
             nexttn = children.get(partnm);
             if (null == nexttn) {
-                log.warn("Creating node for: {}", partnm);
+                log.debug("Creating node for: {}", partnm);
                 nexttn = new TreeNode<>(curtn, partnm);
                 children.put(partnm, nexttn);
                 chillst.add(nexttn);

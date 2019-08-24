@@ -48,8 +48,7 @@ public class JSONFileDAOTest {
    public void getResourceFileNameTest() {
        final String fname = JSONFileDAO.getResourceFileName(FileAttribDAOTest.jpgres);
        final String expname = FileInfoServiceTest.testResources + FileAttribDAOTest.jpgres;
-       //  /C:/dev/wksp/fsorganize/target/test-classes/nd/fsorganize/fileinfo/PANO_20171001_074215.jpg
-       Assert.assertEquals(expname, fname);
+      Assert.assertEquals(expname, fname);
    }
    
    @Test
