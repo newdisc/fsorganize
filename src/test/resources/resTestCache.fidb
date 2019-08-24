@@ -1,0 +1,99 @@
+{
+  "data" : {
+    "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes",
+    "checksum" : null,
+    "createDate" : 1565673225014,
+    "type" : "DIRECTORY",
+    "bytes" : 0,
+    "proctime" : 5
+  },
+  "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes",
+  "children" : [ {
+    "data" : {
+      "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes\\nd",
+      "checksum" : null,
+      "createDate" : 1566098780779,
+      "type" : "DIRECTORY",
+      "bytes" : 0,
+      "proctime" : 5
+    },
+    "name" : "nd",
+    "children" : [ {
+      "data" : {
+        "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes\\nd\\fsorganize",
+        "checksum" : null,
+        "createDate" : 1566098780780,
+        "type" : "DIRECTORY",
+        "bytes" : 0,
+        "proctime" : 1
+      },
+      "name" : "fsorganize",
+      "children" : [ {
+        "data" : {
+          "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes\\nd\\fsorganize\\fileinfo",
+          "checksum" : null,
+          "createDate" : 1566098780781,
+          "type" : "DIRECTORY",
+          "bytes" : 4096,
+          "proctime" : 1
+        },
+        "name" : "fileinfo",
+        "children" : [ {
+          "data" : {
+            "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes\\nd\\fsorganize\\fileinfo\\PANO_20171001_074215.jpg",
+            "checksum" : "ca55ce7f30305d6cc4c7a09cb7e066f2c4ec5dc0cecf311261047dffa854fe50",
+            "createDate" : 1566098785032,
+            "type" : "FILE",
+            "bytes" : 994585,
+            "proctime" : 21
+          },
+          "name" : "PANO_20171001_074215.jpg",
+          "children" : [ ],
+          "value" : 994585
+        } ],
+        "value" : 0
+      }, {
+        "data" : {
+          "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes\\nd\\fsorganize\\util",
+          "checksum" : null,
+          "createDate" : 1566098780782,
+          "type" : "DIRECTORY",
+          "bytes" : 4096,
+          "proctime" : 1
+        },
+        "name" : "util",
+        "children" : [ {
+          "data" : {
+            "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes\\nd\\fsorganize\\util\\docsscan.txt",
+            "checksum" : "cd733a6c54a1fc30d92f6d5491fdac3cdd308420f88d611557d7cfee69606b62",
+            "createDate" : 1566098785054,
+            "type" : "FILE",
+            "bytes" : 181,
+            "proctime" : 2,
+            "DummyProperty": "Should GET ignored"
+          },
+          "name" : "docsscan.txt",
+          "children" : [ ],
+          "value" : 181
+        } ],
+        "value" : 0
+      } ],
+      "value" : 0
+    } ],
+    "value" : 0
+  }, {
+    "data" : {
+      "name" : "C:\\dev\\wksp\\fsorganize\\target\\test-classes\\d.txt",
+      "checksum" : "045b2b0478f563d09f53fc160bdb1bb112da425376d9fa8e6ef312f7ae518b50",
+      "createDate" : 1566043036076,
+      "type" : "FILE",
+      "bytes" : 275,
+      "proctime" : 24
+    },
+    "name" : "d.txt",
+    "children" : [ ],
+    "value" : 275
+  } ],
+  "value" : 0,
+  "DummyValue" : "Should Get Ignored"
+}

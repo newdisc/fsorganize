@@ -2,6 +2,9 @@ package nd.fsorganize.fileinfo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FileInfo {
     private String name;
     private String checksum;
@@ -9,6 +12,7 @@ public class FileInfo {
     private Type type;
     private long bytes;
     private long proctime;
+    private byte[] thumbnail;
     
     public enum Type {
         FILE, DIRECTORY, OTHER
@@ -60,5 +64,13 @@ public class FileInfo {
 
     public void setProctime(long proctime) {
         this.proctime = proctime;
+    }
+
+    public byte[] getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(byte[] thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

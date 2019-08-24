@@ -1,7 +1,8 @@
 package nd.fsorganize.fileinfo;
 
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -26,13 +27,18 @@ public class FileInfoTreeNode extends TreeNode<FileInfo> {
     public void populateTree(final List<FileInfo> ret, final String rootName) {
         ret.stream().forEach(fi ->  populateTreeNode(fi, rootName) );
         if (log.isDebugEnabled()) {
-            log.debug("Json of fileinfo: {}", JSONFileDAO.objectToJson(this));
+            log.debug("Json of fileinfo: {}", JSONFileDAO.objectToJsonS(this));
         }
     }
 
     private void populateTreeNode(FileInfo fi, final String rootName) {
-        final String[] parts = getParts(fi.getName(), rootName);
-        TreeNode<FileInfo> curtn = populatePathTreeNode(parts);
+        TreeNode<FileInfo> curtn;
+        if (!".".equals(fi.getName())) {
+            final Path parts = Paths.get(fi.getName());
+            curtn = populatePathTreeNode(parts);
+        } else {
+            curtn = this;
+        }
         if (curtn.getData() != null) {
             log.error("Overwriting data: {}", curtn.getData());
         }
@@ -46,34 +52,23 @@ public class FileInfoTreeNode extends TreeNode<FileInfo> {
     }
 
     @java.lang.SuppressWarnings("squid:S3824")
-    private TreeNode<FileInfo> populatePathTreeNode(final String[] parts) {
+    private TreeNode<FileInfo> populatePathTreeNode(final Path parts) {
         TreeNode<FileInfo> curtn = this;
-        for (final String part: parts) {
+        for (final Path part: parts) {
             final Map<String, TreeNode<FileInfo>> children = curtn.getChildrenMap();
             final List<TreeNode<FileInfo>> chillst = curtn.getChildren();
             TreeNode<FileInfo> nexttn;
-            nexttn = children.get(part);
+            final String partnm = part.toString();
+            nexttn = children.get(partnm);
             if (null == nexttn) {
-                log.debug("Creating node for: {}", part);
-                nexttn = new TreeNode<>(curtn, part);
-                children.put(part, nexttn);
+                log.warn("Creating node for: {}", partnm);
+                nexttn = new TreeNode<>(curtn, partnm);
+                children.put(partnm, nexttn);
                 chillst.add(nexttn);
             }
             curtn = nexttn;
             log.debug("Part: {}", part);
         }
         return curtn;
-    }
-
-    private static String[] getParts(final String full, final String rootName) {
-        final String rootfinm = rootName;//HAS TO BE CANONICAL NAME
-        final int rootfilen = rootfinm.length();
-        String[] parts = new String[0];
-        if (!full.contentEquals(rootfinm)) {
-            final String last = full.substring(rootfilen + 1);
-            log.debug(last);
-            parts = last.split("\\" + File.separator);
-        }
-        return parts;
     }
 }

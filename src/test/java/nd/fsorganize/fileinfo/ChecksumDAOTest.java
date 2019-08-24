@@ -30,16 +30,11 @@ public class ChecksumDAOTest {
     @Test
     public void checksumFileTest() {
         final File fl = new File(testfil);
-        final File fsha = new File(testfil + ChecksumDAO.SHAEXT);
-        fsha.delete();
-        String cks = ChecksumDAO.checksumFile(fl, null);
+        final String cks = ChecksumDAO.checksumFile(fl);
         log.info("Checksum: {}", cks);
         Assert.assertNotNull(cks);
         Assert.assertNotEquals(0, cks.length());
         Assert.assertEquals(cksum, cks);
-        // .sha3 file will be used now 
-        cks = ChecksumDAO.checksumFile(fl, null);
-        Assert.assertNotNull(cks);
     }
     @Test
     public void bytesToHexTest() {
@@ -51,32 +46,9 @@ public class ChecksumDAOTest {
     @Test
     public void checksumFileBytesTest() throws Exception {
         final File fl = new File(testfil);
-        final byte[] cks = ChecksumDAO.checksumFileBytes(fl, null);
+        final byte[] cks = ChecksumDAO.checksumFileBytes(fl);
         Assert.assertNotNull(cks);
         Assert.assertNotEquals(0, cks.length);
         Assert.assertArrayEquals(cksby, cks);
     }
-    /*
-    @Test
-    public void checksumFileBytesExitTest() throws Exception {
-        final File fl = new File( FileAttribDAOTest.testfil);
-        final byte[] cks = ChecksumDAO.checksumFileBytes(fl, new ChecksumDAO.StreamReader() {
-            @Override
-            public void readStream(InputStream ins) {
-                Map<String, String> fileattr = null;
-                try {
-                    fileattr = FileAttribDAO.getAttribFile(ins);
-                } catch (ImageProcessingException | IOException e) {
-                    // TODO Auto-generated catch block
-                    log.error("Exception: ", e);
-                }
-                Assert.assertNotNull(fileattr);
-                Assert.assertNotEquals(0, fileattr.size());
-            }
-        });//994714 then 986522
-        Assert.assertNotNull(cks);
-        Assert.assertNotEquals(0, cks.length);
-        //Assert.assertArrayEquals(cksby, cks);
-    }
-    */
 }

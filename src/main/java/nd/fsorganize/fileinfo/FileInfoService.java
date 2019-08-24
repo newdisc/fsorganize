@@ -2,6 +2,7 @@ package nd.fsorganize.fileinfo;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -10,7 +11,10 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import nd.fsorganize.util.FSOrganizeException;
+import nd.fsorganize.util.FileCacheDAO;
 
 public class FileInfoService {
     private static Logger log = LoggerFactory.getLogger(FileInfoService.class);
@@ -24,6 +28,10 @@ public class FileInfoService {
         final String rootcname = FileInfoDAO.getCannonicalName(rootdir);
         root = new FileInfoTreeNode(null, rootcname);
         root.populateTree(ret, rootcname);
+        final String fileinfdb = rootcname + "/cache.fidb";
+        FileCacheDAO<FileInfoTreeNode> cache = new FileCacheDAO<>(
+                new TypeReference<FileInfoTreeNode>() {});
+        cache.writeCache(fileinfdb, root);
         return root;
     }
     //2019-06-26 16:49:02 | WARN  | [main] n.f.FileInfoDAOTests:55 - Entire File List Time taken: 475094 default 3
@@ -34,14 +42,15 @@ public class FileInfoService {
     public List<FileInfo> getFilesInfo(final File rootdir) {
         final ForkJoinPool forkJoinPool = new ForkJoinPool(10);
         try {
+            final String rootcanname = rootdir.getCanonicalPath();
             return forkJoinPool.submit(() ->
                 //parallel task here, for example
                 FileTraverseDAO.getFiles(rootdir)
                 .parallel()
-                .map(FileInfoDAO::getFileInfo)
+                .map( file -> FileInfoDAO.getFileInfo(file, rootcanname) )
                 .collect(Collectors.toList())
                 ).get();
-        } catch (ExecutionException  e) {
+        } catch (ExecutionException | IOException e) {
             throw FSOrganizeException.raiseAndLog("Could not find FileInfos of : " + rootdir, e, log);
         } catch (InterruptedException e) {
             FSOrganizeException a = FSOrganizeException.raiseAndLog("Could not find FileInfos of : " + rootdir, e, log);

@@ -2,11 +2,9 @@ package nd.fsorganize.util;
 
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,39 +14,47 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-//TODO: Fix the template type to work with both Lists and Objects
 public class JSONFileDAO<T> {
     private static Logger log = LoggerFactory.getLogger(JSONFileDAO.class);
-    public List<T> readResource(final String resName, final TypeReference<List<T>> tr) {
+
+    private final ObjectMapper jsonMapper;
+    private static final ObjectMapper commonMapper = new ObjectMapper();
+    private final TypeReference<T> typeOfT;
+    static {
+        commonMapper.enable(SerializationFeature.INDENT_OUTPUT);
+    }
+
+    public T readResource(final String resName) {
         final InputStream strm = JSONFileDAO.class.getResourceAsStream(resName);
         if (null == strm) {
             throw FSOrganizeException.raiseAndLog("Could not find Resource: " + resName, null, log);
         }
-        return (List<T>)readObject(tr, strm);
-    }
-    public T readFile(final String fname, final TypeReference<T> tr) {
         try {
-            final T ret = (T)JSONFileDAO.readObject(tr, new FileInputStream(fname));
-            return ret;
-        } catch (FileNotFoundException e) {
+            return readObject(strm);
+        } catch (IOException e) {
+            throw FSOrganizeException.raiseAndLog("Issure reading resource file: " + resName, e, log);
+        }
+    }
+    public T readFile(final String fname) {
+        try (final FileInputStream fis = new FileInputStream(fname)){
+            return readObject(fis);
+        } catch (IOException e) {
             throw FSOrganizeException.raiseAndLog("Could not find file: " + fname, e, log);
         }
     }
-    public static Object readObject(final TypeReference tr, final InputStream strm) {
-        try {
-        final ObjectMapper jsonMapper = new ObjectMapper();
+    private T readObject(final InputStream strm) throws IOException {
         // deserialize contents of file into an object of type
-        final Object fileread = jsonMapper.readValue(strm, tr);
+        final T fileread = jsonMapper.readValue(strm, typeOfT);
         log.debug("Finished readingResource");
-                //new TypeReference<List<T>>() {});//Using this form leads to typeerasure and us getting only list of maps
         return fileread;
-        } catch (IOException e) {
-            throw FSOrganizeException.raiseAndLog("Could not read Object from Stream ", e, log);
-        }
     }
-    public static String objectToJson(final Object obj) {
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    public String objectToJson(final T obj) {
+        return JSONFileDAO.objectToJsonS(jsonMapper,obj);
+    }
+    public static String objectToJsonS(final Object obj) {
+        return JSONFileDAO.objectToJsonS(commonMapper, obj);
+    }
+    private static String objectToJsonS(final ObjectMapper mapper, final Object obj) {
         final String ret;
         try {
             ret = mapper.writeValueAsString(obj);
@@ -59,8 +65,12 @@ public class JSONFileDAO<T> {
     }
     public static String getResourceFileName(final String resname) {
         final URL url = JSONFileDAO.class.getResource(resname);
-        final String path = url.getPath();
-        return path;
+        return url.getPath();
+    }
+    public JSONFileDAO(TypeReference<T> typeclass) {
+        jsonMapper = new ObjectMapper();
+        jsonMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        typeOfT = typeclass;
     }
 }
 

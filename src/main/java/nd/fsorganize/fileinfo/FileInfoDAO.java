@@ -2,17 +2,19 @@ package nd.fsorganize.fileinfo;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import com.drew.imaging.ImageProcessingException;
 
 import nd.fsorganize.fileinfo.FileInfo.Type;
 import nd.fsorganize.util.FSOrganizeException;
@@ -20,30 +22,21 @@ import nd.fsorganize.util.FSOrganizeException;
 @Component
 public class FileInfoDAO {
     private static Logger log = LoggerFactory.getLogger(FileInfoDAO.class);
-    private static class ImageAttributeReader implements ChecksumDAO.StreamReader {
-        private Map<String, String> readAttributes = null;
-        public Map<String, String> getReadAttributes() {
-            return readAttributes;
-        }
-        @Override
-        public void readStream(InputStream str) {
-            try {
-                readAttributes = FileAttribDAO.getAttribFile(str);
-            } catch (ImageProcessingException | IOException e) {
-                FSOrganizeException a = FSOrganizeException.raiseAndLog("Could NOT get ImageAttributes from stream" + e.getMessage(), e, log);
-                throw a;
-            }
-        }
-    }
-    public static FileInfo getFileInfo(final File fl) {
+    private static String[] EXTS = {".jpg", ".JPG", ".jpeg", ".JPEG"};
+    private static Set<String> IMGEXT = new HashSet<>(Arrays.asList(EXTS));
+    public static FileInfo getFileInfo(final File fl, final String rootDir1) {
+        final Path rootPath = Paths.get(rootDir1);
+        final int numRootComponents = rootPath.getNameCount();
         long start = System.currentTimeMillis();
         final String fname = getCannonicalName(fl);
+        final Path fPath = Paths.get(fname);
+        final int numFileComponents = fPath.getNameCount();
         final BasicFileAttributes bfn;
         try {
             bfn = Files.readAttributes(fl.toPath(), BasicFileAttributes.class);
         } catch (IOException e) {
-            FSOrganizeException a = FSOrganizeException.raiseAndLog("Could not find basic attributes of : " + fl.getName(), e, log);
-            throw a;
+            throw FSOrganizeException.raiseAndLog(
+                "Could not find basic attributes of : " + fl.getName(), e, log);
         }
         
         final FileInfo.Type type;
@@ -56,15 +49,28 @@ public class FileInfoDAO {
         }
         
         final FileInfo finf = new FileInfo();
-        finf.setName(fname);
+        final String lname;// = fname.substring(rootDir.length(), fname.length());
+        
+        if (numRootComponents == numFileComponents) {
+            lname = ".";
+        } else {
+            lname = fPath.subpath(numRootComponents, numFileComponents).toString();
+        }
+        finf.setName(lname);
         finf.setCreateDate(new Date(bfn.creationTime().toMillis()));
         finf.setType(type);
         finf.setBytes(bfn.size());
         if (type == Type.FILE) {
-            final ImageAttributeReader imgattr = new ImageAttributeReader();
-            final String checksum = ChecksumDAO.checksumFile(fl, imgattr);
+            //TODO: Populate into FileInfo the Image attributes - GPS / date?
+            final byte[] thumbnail = ThumbNailDAO.getThumbNail(fname);
+            finf.setThumbnail(thumbnail);
+            final String fext = fname.substring(fname.lastIndexOf("."), fname.length());
+            if (IMGEXT.contains(fext)) {
+                final Map<String, String> imgattr = FileAttribDAO.getAttribFile(fl);
+                log.debug("Image Attributes: {}", imgattr);
+            }
+            final String checksum = ChecksumDAO.checksumFile(fl);
             finf.setChecksum(checksum);
-            log.info("Image Attributes: {}", imgattr.getReadAttributes());
         }
         long end = System.currentTimeMillis();
         finf.setProctime(end-start);
@@ -76,7 +82,8 @@ public class FileInfoDAO {
         try {
             fname = fl.getCanonicalPath();
         } catch (IOException e) {
-            throw FSOrganizeException.raiseAndLog("Could not find canonical path of : " + fl.getName(), e, log);
+            throw FSOrganizeException.raiseAndLog(
+                    "Could not find canonical path of : " + fl.getName(), e, log);
         }
         return fname;
     }

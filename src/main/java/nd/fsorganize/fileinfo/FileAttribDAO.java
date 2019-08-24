@@ -1,5 +1,7 @@
 package nd.fsorganize.fileinfo;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import java.io.InputStream;
@@ -15,15 +17,25 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 
+import nd.fsorganize.util.FSOrganizeException;
+
 public class FileAttribDAO {
     private static Logger log = LoggerFactory.getLogger(FileAttribDAO.class);
+    public static Map<String, String> getAttribFile(final File fi) {
+        try {
+            return FileAttribDAO.getAttribFile(new FileInputStream(fi));
+        } catch (ImageProcessingException | IOException e) {
+            throw FSOrganizeException.raiseAndLog(
+                    "Could not get Image Attributes of : " + fi.getName(), e, log);
+        }
+    }
     public static Map<String, String> getAttribFile(final InputStream fis) throws ImageProcessingException, IOException {
         final Map<String, String> ret = new HashMap<>();
         log.debug("Retrieving file Exif/Meta Attributes:" );
         Metadata metadata = ImageMetadataReader.readMetadata(fis);
         for (Directory directory : metadata.getDirectories()) {
             for (Tag tag : directory.getTags()) {
-                log.debug(tag.toString() + " : Name : {} : Description : {}", tag.getTagName(), tag.getDescription());
+                log.debug("{} : Name : {} : Description : {}", tag, tag.getTagName(), tag.getDescription());
                 final String name = tag.getTagName();
                 final String value = tag.getDescription();
                 ret.put(name, value);
