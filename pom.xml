@@ -23,7 +23,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <frontend.dir>src/main/frontend</frontend.dir>
         <dev.mode>true</dev.mode><!-- Cannot be used -->
-        <metadata.extractor.version>2.12.0</metadata.extractor.version>
+        <metadata.extractor.version>2.18.0</metadata.extractor.version>
     </properties>
     
     <profiles>
